@@ -176,14 +176,14 @@ flowchart LR
 flowchart TB
   subgraph src/
     subgraph strategy/
-      rules[rules_engine.py<br/>- SMA crossover]
-      llm[llm_advisor.py (optional)]
+      rules["rules_engine.py<br/>- SMA crossover"]
+      llm["llm_advisor.py (optional)"]
       signals[signals.py]
     end
 
     subgraph data/
-      providers[providers/<br/>alpaca.py]
-      storage[storage.py (SQLite/CSV)]
+      providers["providers/<br/>alpaca.py"]
+      storage["storage.py (SQLite/CSV)"]
     end
 
     subgraph risk/
@@ -202,7 +202,7 @@ flowchart TB
     end
 
     backtest[backtest/backtester.py]
-    app[app.py (entrypoint)]
+    app["app.py (entrypoint)"]
     config[config.py]
     loggingc[logging_conf.py]
   end
