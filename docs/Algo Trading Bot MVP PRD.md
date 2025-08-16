@@ -134,10 +134,10 @@ This MVP provides a safe, auditable environment to validate strategies, policies
 ```mermaid
 flowchart LR
   Trader[(Trader/Operator)]
-  subgraph App[Algo Bot App (single service)]
+  subgraph App["Algo Bot App (single service)"]
     Orchestrator[Scheduler]
-    Strategy[Strategy Engine<br/>(SMA crossover)]
-    LLM[LLM Advisor (optional)]
+    Strategy["Strategy Engine<br/>(SMA crossover)"]
+    LLM["LLM Advisor (optional)"]
     Policy[Policy Engine]
     Router[Order Router]
     Portfolio[Portfolio/P&L]
