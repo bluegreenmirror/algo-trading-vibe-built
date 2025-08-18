@@ -21,8 +21,10 @@ cp .env.example .env
 
 # 4) Update image when dependencies change
 ./scripts/update.sh
+```
 
-## Quickstart with Poetry
+## Quickstart with Poetry (optional)
+
 ```bash
 # Install Poetry if you don't have it
 # pipx install poetry
@@ -45,3 +47,5 @@ poetry run python -m src.app hello
 ## Notes
 - Secrets are **not** in the repo. Use `.env` locally or a secrets manager.
 - Pre-commit hooks provide formatting, linting, and secret scanning.
+- CI builds & tests **inside Docker**.
+- Tagging a release like `v1.0.0` will build & push a container image to **GHCR**.
