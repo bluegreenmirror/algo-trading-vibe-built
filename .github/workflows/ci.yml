@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build image
+      - name: Build Docker image
+        run: docker build -t algo-bot-ci:latest .
+
+      # Run tests inside the image
+      - name: Run tests
+        run: docker run --rm algo-bot-ci:latest poetry run pytest -q
+
+      # Lint & format checks inside the image
+      - name: Ruff & Black checks
+        run: |
+          docker run --rm algo-bot-ci:latest poetry run ruff check .
+          docker run --rm algo-bot-ci:latest poetry run black --check .
