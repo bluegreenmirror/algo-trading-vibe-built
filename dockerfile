@@ -25,5 +25,5 @@ ENV POETRY_VIRTUALENVS_CREATE=false \
 RUN poetry install --no-interaction --no-ansi
 
 # Default command -> CLI help
-ENTRYPOINT ["poetry", "run", "python", "-m", "src.app"]
-CMD ["--help"]
+# Run with system Python; deps were installed into site-packages during build
+ENTRYPOINT ["python", "-m", "src.app"]

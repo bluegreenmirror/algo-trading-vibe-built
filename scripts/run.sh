@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Run the CLI in Docker without needing Poetry locally
+set -x
+# Forward all CLI args to the container's entrypoint
 docker compose run --rm app "$@"
