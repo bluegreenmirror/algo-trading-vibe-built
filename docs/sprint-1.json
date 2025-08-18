@@ -1,0 +1,124 @@
+{
+  "sprint": {
+    "name": "Sprint 1 — Foundation & First Paper Trade",
+    "duration_weeks": 3,
+    "milestone": "v0.1.0-alpha",
+    "goal": "Deliver a working bot skeleton that can fetch market data, run SMA strategy, enforce basic policy, and place paper trades.",
+    "epics": [
+      {
+        "name": "Repo & Environment Setup",
+        "issues": [
+          {
+            "id": "S1-E1-I1",
+            "title": "Create repo skeleton with Docker & Poetry",
+            "description": "Initialize repo with src/, tests/, docs/, configs/, docker-compose. Add Dockerfile + Poetry for dependencies.",
+            "schedule_day": 1,
+            "definition_of_done": "Repo created; `docker-compose up` runs placeholder app printing 'hello world'."
+          },
+          {
+            "id": "S1-E1-I2",
+            "title": "Add CI/CD pipeline",
+            "description": "Set up GitHub Actions for lint, test, build on pull requests and main branch.",
+            "schedule_day": 2,
+            "definition_of_done": "Pull requests automatically trigger lint & unit tests successfully."
+          }
+        ]
+      },
+      {
+        "name": "Alpaca Integration (Paper Trading)",
+        "issues": [
+          {
+            "id": "S1-E2-I1",
+            "title": "Connect to Alpaca Market Data API",
+            "description": "Implement data provider module with function to fetch OHLCV bars for a symbol.",
+            "schedule_day": 3,
+            "definition_of_done": "`python -m src.data.providers.alpaca fetch AAPL` prints OHLCV bars to console."
+          },
+          {
+            "id": "S1-E2-I2",
+            "title": "Connect to Alpaca Paper Trading API",
+            "description": "Implement order client to place a market order with sandbox account.",
+            "schedule_day": 4,
+            "definition_of_done": "Test script places a $1 notional trade in Alpaca paper account and logs order id."
+          }
+        ]
+      },
+      {
+        "name": "Strategy Engine (Basic SMA)",
+        "issues": [
+          {
+            "id": "S1-E3-I1",
+            "title": "Implement SMA crossover function",
+            "description": "Create function to compute SMA fast/slow and return buy/sell/none signals.",
+            "schedule_day": 5,
+            "definition_of_done": "Unit test shows correct buy/sell/none signal on sample CSV data."
+          },
+          {
+            "id": "S1-E3-I2",
+            "title": "Integrate SMA into bot loop",
+            "description": "Wire strategy into app scheduler; on each tick, compute signal using Alpaca data.",
+            "schedule_day": 6,
+            "definition_of_done": "When running bot, SMA signals (buy/sell/none) are printed to logs."
+          }
+        ]
+      },
+      {
+        "name": "Policy Engine (Stub)",
+        "issues": [
+          {
+            "id": "S1-E4-I1",
+            "title": "Create policy engine module",
+            "description": "Implement placeholder policy checks (always returns ok).",
+            "schedule_day": 7,
+            "definition_of_done": "All trade signals pass through policy engine; log shows 'policy=ok'."
+          },
+          {
+            "id": "S1-E4-I2",
+            "title": "Add max notional check",
+            "description": "Implement limit: max notional $1000 per trade.",
+            "schedule_day": 8,
+            "definition_of_done": "Signal exceeding notional is blocked and logged in audit."
+          }
+        ]
+      },
+      {
+        "name": "Execution & Audit Logging",
+        "issues": [
+          {
+            "id": "S1-E5-I1",
+            "title": "Wire signal → policy → order",
+            "description": "Complete loop: strategy → policy → Alpaca order → log result.",
+            "schedule_day": 9,
+            "definition_of_done": "Running bot places valid trade in Alpaca paper account, logs full decision trace."
+          },
+          {
+            "id": "S1-E5-I2",
+            "title": "Structured audit logging",
+            "description": "Log every decision in JSON format (strategy, policy decision, order result).",
+            "schedule_day": 10,
+            "definition_of_done": "Audit log file contains JSON entries per tick with timestamp."
+          }
+        ]
+      },
+      {
+        "name": "Validation & Demo",
+        "issues": [
+          {
+            "id": "S1-E6-I1",
+            "title": "Run 1-day paper demo",
+            "description": "Deploy bot with Docker Compose, run for 1 day using Alpaca sandbox.",
+            "schedule_day": 12,
+            "definition_of_done": "Audit logs show trades executed with SMA strategy; policy enforced."
+          },
+          {
+            "id": "S1-E6-I2",
+            "title": "Sprint 1 Review & Documentation",
+            "description": "Write README with setup/run instructions, update docs with Sprint 1 outcomes.",
+            "schedule_day": 13,
+            "definition_of_done": "Docs explain how to build, run, validate Sprint 1 bot."
+          }
+        ]
+      }
+    ]
+  }
+}
