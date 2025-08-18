@@ -2,7 +2,9 @@ services:
   app:
     environment:
       - PYTHONUNBUFFERED=1
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile 
     env_file:
       - .env
     restart: unless-stopped

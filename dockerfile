@@ -9,21 +9,35 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Install Poetry in the image (no need on host)
-RUN pip install --no-cache-dir poetry==1.8.3
+ARG POETRY_VERSION=1.8.3
+RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
+
+
+# Environment: deterministic + unbuffered I/O
+ENV POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_NO_INTERACTION=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
 
 # Copy metadata first (better layer caching)
 COPY pyproject.toml README.md .pre-commit-config.yaml .secrets.baseline ./
-# Copy source last
+# If you commit a lockfile later, uncomment next line for reproducible builds:
+# COPY poetry.lock ./
+
+# Copy source (dev image includes tests; for a prod image, skip tests/)
 COPY src ./src
 COPY tests ./tests
 
-# Install deps (no venv -> use system site-packages in container)
-ENV POETRY_VIRTUALENVS_CREATE=false \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+# (not implemented) switch to non-root user for runtime security
+# RUN addgroup --system app && adduser --system --ingroup app app
+# RUN chown -R app:app /app
+# USER app
 
-RUN poetry install --no-interaction --no-ansi
+# Install deps before copying the full source for better caching when code changes
+# Install only dependencies (no project) to leverage caching
+RUN poetry install --no-ansi --no-root
 
-# Default command -> CLI help
 # Run with system Python; deps were installed into site-packages during build
 ENTRYPOINT ["python", "-m", "src.app"]
