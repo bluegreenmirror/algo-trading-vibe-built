@@ -1,0 +1,65 @@
+{
+  "sprints": [
+    {
+      "name": "Sprint 1 — Foundation & First Paper Trade",
+      "duration_weeks": 3,
+      "milestone": "v0.1.0-alpha",
+      "goal": "Deliver a working bot skeleton that can fetch market data, run SMA strategy, enforce basic policy, and place paper trades.",
+      "features": [
+        "Repo scaffold with Docker & Poetry",
+        "CI/CD with GitHub Actions",
+        "Alpaca market data + paper trading integration",
+        "SMA crossover strategy (configurable)",
+        "Policy engine (max notional check)",
+        "Structured audit logging"
+      ],
+      "validation": "Bot runs on Alpaca sandbox for 1 day; logs show SMA signals, policy check, and executed trades."
+    },
+    {
+      "name": "Sprint 2 — Backtesting & Risk Enhancements",
+      "duration_weeks": 3,
+      "milestone": "v0.2.0-beta",
+      "goal": "Introduce backtesting framework and expand risk controls.",
+      "features": [
+        "Backtest module with CSV/SQLite OHLCV store",
+        "CLI interface for running backtests",
+        "Policy engine with position limits & daily loss cap",
+        "PnL tracking (daily, cumulative)",
+        "Audit log integrated into backtest results"
+      ],
+      "validation": "Run SMA strategy on historical AAPL/TSLA data; verify signals, orders, PnL and logs are consistent."
+    },
+    {
+      "name": "Sprint 3 — Observability & Configurable Strategies",
+      "duration_weeks": 3,
+      "milestone": "v1.0.0-MVP",
+      "goal": "Deliver full MVP with observability, configurable policies, and deployment automation.",
+      "features": [
+        "Config-driven strategies (SMA, EMA, buy-and-hold)",
+        "Configurable policy thresholds via config.yml",
+        "Trade history & PnL dashboard (CLI or web UI)",
+        "Health checks & structured logging",
+        "Deployment script for upgrades",
+        "Complete documentation (setup, run, extend)"
+      ],
+      "validation": "Deploy bot for 1-week Alpaca sandbox run; backtest vs. live results compared; dashboard/report generated."
+    }
+  ],
+  "releases": [
+    {
+      "version": "v0.1.0-alpha",
+      "date": "End of Sprint 1 (~3 weeks)",
+      "deliverables": "Bot skeleton + first paper trades"
+    },
+    {
+      "version": "v0.2.0-beta",
+      "date": "End of Sprint 2 (~6 weeks)",
+      "deliverables": "Backtesting framework + extended risk policies"
+    },
+    {
+      "version": "v1.0.0-MVP",
+      "date": "End of Sprint 3 (~9 weeks)",
+      "deliverables": "Configurable strategies + observability + deploy automation"
+    }
+  ]
+}
