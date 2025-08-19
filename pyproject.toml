@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "algo-bot-mvp"
+version = "0.1.0"
+description = "Algo Trading Bot MVP — Sprint 1 starter"
+authors = ["You <you@example.com>"]
+readme = "README.md"
+packages = [{ include = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.2"
+pydantic = "^2.7.1"
+pydantic-settings = "^2.3.4"
+click = "^8.1.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-cov = "^5.0.0"
+ruff = "^0.5.0"
+black = "^24.4.2"
+mypy = "^1.10.0"
+pre-commit = "^3.7.0"
+detect-secrets = "^1.4.0"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E","F","I","B","UP"]
+extend-exclude = ["build", "dist", ".venv"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

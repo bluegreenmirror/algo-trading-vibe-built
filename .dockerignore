@@ -1,0 +1,15 @@
+.git
+.gitignore
+**/__pycache__/
+*.pyc
+.venv
+poetry.lock
+.env
+secrets/
+artifacts/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage

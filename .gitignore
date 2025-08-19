@@ -1,0 +1,17 @@
+# .gitignore
+# This file is used to ignore files and directories in the repository.
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+dist/
+build/
+.DS_Store
+.env
+.venv
+poetry.lock
+secrets/
+!secrets/.gitkeep
+.gitleaks.*

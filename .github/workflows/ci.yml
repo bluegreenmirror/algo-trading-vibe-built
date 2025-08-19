@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+security-scan:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t algo-bot-ci:latest .
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: 'algo-bot-ci:latest'
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '1'
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build image
+      - name: Build Docker image
+        run: docker build -t algo-bot-ci:latest .
+
+      # Run tests inside the image
+      - name: Run tests
+        run: docker run --rm algo-bot-ci:latest poetry run pytest -q
+
+      # Lint & format checks inside the image
+      - name: Ruff & Black checks
+        run: |
+          docker run --rm algo-bot-ci:latest poetry run ruff check .
+          docker run --rm algo-bot-ci:latest poetry run black --check .
