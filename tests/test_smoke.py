@@ -1,4 +1,3 @@
-#tests/test_smoke.py
+# tests/test_smoke.py
 def test_smoke():
     assert True
-
