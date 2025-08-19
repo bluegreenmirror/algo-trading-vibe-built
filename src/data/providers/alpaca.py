@@ -93,7 +93,7 @@ def submit_order(
     symbol: str,
     notional: float,
     side: str,
-    *, 
+    *,
     client: REST | None = None,
     settings: Settings | None = None,
 ) -> Any:
