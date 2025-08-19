@@ -20,6 +20,7 @@ def fetch_bars_cmd(symbol: str, limit: int):
     """Fetch sample OHLCV bars from Alpaca (requires .env with API keys)."""
     try:
         from src.data.providers.alpaca import fetch_bars
+
         rows = fetch_bars(symbol=symbol, limit=limit)
         click.echo(f"Fetched {len(rows)} bars for {symbol}")
         for r in rows:

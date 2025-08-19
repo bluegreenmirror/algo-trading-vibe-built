@@ -5,7 +5,7 @@ class FakeRESTClient:
     def get_bars(self, symbol, timeframe, limit=5):
         class Bar:
             def __init__(self, i):
-                self._raw = {"t": f"2025-01-0{i+1}", "o": 100+i, "c": 101+i}
+                self._raw = {"t": f"2025-01-0{i+1}", "o": 100 + i, "c": 101 + i}
 
         return [Bar(i) for i in range(limit)]
 

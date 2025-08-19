@@ -9,6 +9,7 @@ try:  # Optional import; tests may inject a fake client
     from alpaca_trade_api.rest import REST, TimeFrame
 except Exception:  # pragma: no cover
     REST = object  # type: ignore
+
     class TimeFrame:  # type: ignore
         Day = "1Day"
 
@@ -18,7 +19,7 @@ class Bar:
     t: Any
     o: float
     h: float
-    low: float # Renamed l to low
+    low: float  # Renamed l to low
     c: float
     v: float
 
@@ -108,7 +109,4 @@ class AlpacaMarketData:
             settings=self.settings,
         )
         # Convert Bar dataclasses to dicts for compatibility with older tests
-        return [
-            {"t": b.t, "o": b.o, "h": b.h, "l": b.low, "c": b.c, "v": b.v}
-            for b in bars
-        ]
+        return [{"t": b.t, "o": b.o, "h": b.h, "l": b.low, "c": b.c, "v": b.v} for b in bars]
