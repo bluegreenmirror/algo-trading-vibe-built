@@ -1,3 +1,6 @@
+
+# AGENTS
+
 # Agent Guidelines
 
 ## Sprint-oriented development
@@ -16,3 +19,6 @@
 - Reference `.pre-commit-config.yaml` for linting and formatting.
 - Run tests or demo scripts before each commit.
 - Propose improvements and note outstanding work for future sprints.
+- Follow PEP 8 naming and formatting guidelines.
+- Include module/function docstrings and descriptive comments.
+- Structure functions and classes around the single-responsibility principle.
