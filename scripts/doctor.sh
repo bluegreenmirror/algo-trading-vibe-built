@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Verify the development environment by rebuilding and running core checks.
+# Usage: ./scripts/doctor.sh
 set -euo pipefail
 
 echo "== Rebuilding image =="
