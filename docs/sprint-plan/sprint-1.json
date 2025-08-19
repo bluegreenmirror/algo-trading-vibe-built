@@ -21,7 +21,8 @@
             "title": "Add CI/CD pipeline",
             "description": "Set up GitHub Actions for lint, test, build on pull requests and main branch.",
             "schedule_day": 2,
-            "definition_of_done": "Pull requests automatically trigger lint & unit tests successfully."
+            "definition_of_done": "Pull requests automatically trigger lint & unit tests successfully.",
+            "status": "complete"
           }
         ]
       },
@@ -33,7 +34,8 @@
             "title": "Connect to Alpaca Market Data API",
             "description": "Implement data provider module with function to fetch OHLCV bars for a symbol.",
             "schedule_day": 3,
-            "definition_of_done": "`python -m src.data.providers.alpaca fetch AAPL` prints OHLCV bars to console."
+            "definition_of_done": "`python -m src.data.providers.alpaca fetch AAPL` prints OHLCV bars to console.",
+            "status": "in_progress"
           },
           {
             "id": "S1-E2-I2",
