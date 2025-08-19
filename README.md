@@ -46,6 +46,23 @@ poetry run python -m src.app --help
 poetry run python -m src.app hello
 ```
 
+## Development Workflow
+
+- Run `make doctor` or `scripts/doctor.sh` to verify your environment.
+- Before committing, execute `make lint`, `make fmt`, and `make test`.
+- Use `scripts/validate_day1.sh` for a full checklist.
+
+## Key Environment Variables
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `ENV` | `dev` | Execution environment. |
+| `ALPACA_KEY_ID` | `None` | Alpaca API key identifier. |
+| `ALPACA_SECRET_KEY` | `None` | Alpaca API secret. |
+| `ALPACA_BASE_URL` | `https://paper-api.alpaca.markets` | Alpaca API base URL. |
+| `SYMBOLS` | `AAPL, MSFT, SPY` | Comma-separated list of symbols. |
+| `SCHEDULE_CRON` | `*/5 * * * *` | Cron schedule for automated tasks. |
+
 ## Notes
 - Secrets are **not** in the repo. Use `.env` locally or a secrets manager.
 - Pre-commit hooks provide formatting, linting, and secret scanning.
