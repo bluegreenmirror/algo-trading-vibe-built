@@ -13,7 +13,8 @@
             "title": "Create repo skeleton with Docker & Poetry",
             "description": "Initialize repo with src/, tests/, docs/, configs/, docker-compose. Add Dockerfile + Poetry for dependencies.",
             "schedule_day": 1,
-            "definition_of_done": "Repo created; `docker-compose up` runs placeholder app printing 'hello world'."
+            "definition_of_done": "Repo created; `docker-compose up` runs placeholder app printing 'hello world'.",
+            "status": "complete"
           },
           {
             "id": "S1-E1-I2",

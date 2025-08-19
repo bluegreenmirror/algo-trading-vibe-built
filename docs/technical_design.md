@@ -232,6 +232,25 @@ strategy:
 
 ---
 
+## 7.3 Containerization & Development Workflow
+
+- **Docker & Docker Compose**: The MVP is containerized using Docker to ensure consistent environments across development and deployment. Docker Compose orchestrates multiple services and dependencies, simplifying startup and management.
+
+- **Makefile**: A Makefile is provided to streamline common tasks such as building images, running containers, executing tests, and cleaning artifacts. This standardizes workflows and reduces manual command complexity.
+
+- **`scripts/doctor.sh`**: This diagnostic script performs environment checks, validates dependencies, and verifies configuration correctness to help developers quickly identify issues before running the system.
+
+- **Artifacts Directory**: Generated data such as logs, reports, and exported CSVs are stored in a dedicated `artifacts/` directory. This separation facilitates easier access to outputs and supports artifact retention policies in CI/CD pipelines.
+
+- **Development Flow**:
+  1. Configure environment variables in `.env`.
+  2. Use `docker-compose up` to start the service stack.
+  3. Run `make doctor` to verify setup.
+  4. Use `make test` for executing unit and integration tests.
+  5. Inspect outputs and logs in `artifacts/`.
+
+---
+
 ## 8. Observability & Audit
 ### 8.1 JSON Log Envelope
 ```json
@@ -254,11 +273,15 @@ ts,component,event,symbol,side,qty,price_or_hint,notional,status,details
 
 ---
 
-## 10. Testing Plan
+## 10. Testing Plan & Execution
 - **Unit**: strategy signals, policy limits, idempotency collision.
 - **Integration**: Alpaca sandbox order placement; verify state tables updated.
 - **Backtests**: load deterministic CSV; assert metric thresholds.
 - **Chaos**: simulate broker 5xx/429; ensure fail-closed and no dup orders.
+
+### 10.1 Sprint Execution Summary
+- **Day 1**: Completed core strategy implementation (SMA crossover), policy engine with risk checks, and SQLite schema setup. Basic order routing and idempotency logic verified.
+- **Day 2**: Finalized containerization with Docker Compose, added Makefile and `doctor.sh` script for environment validation. Implemented structured logging and audit trails with output artifacts directory. Integration tests against Alpaca paper API sandbox passed.
 
 ---
 
