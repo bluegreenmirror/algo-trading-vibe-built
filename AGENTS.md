@@ -1,4 +1,3 @@
-
 # AGENTS
 
 # Agent Guidelines
@@ -22,3 +21,8 @@
 - Follow PEP 8 naming and formatting guidelines.
 - Include module/function docstrings and descriptive comments.
 - Structure functions and classes around the single-responsibility principle.
+
+## Architecture Guidelines
+- Isolate domain logic from I/O and external systems to maintain clear layers.
+- Favor reusable modules and avoid tightly coupled code for maintainability.
+- Use dependency injection or interfaces to allow components to be interchangeable.
