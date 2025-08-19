@@ -36,7 +36,8 @@ helpcli:
 
 .PHONY: test
 test:
-	docker compose run --rm --entrypoint pytest app -q
+
+	docker compose run --rm --entrypoint python app -m pytest -v --maxfail=1 --disable-warnings
 
 .PHONY: lint
 lint:

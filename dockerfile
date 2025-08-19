@@ -19,7 +19,8 @@ ENV POETRY_VIRTUALENVS_CREATE=false \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONPATH=/app
 
 # Copy metadata first (better layer caching)
 COPY pyproject.toml README.md .pre-commit-config.yaml .secrets.baseline ./
