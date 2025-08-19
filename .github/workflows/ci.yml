@@ -26,6 +26,7 @@ jobs:
           context: .
           file: Dockerfile
           push: false
+          load: true
           tags: |
             algo-bot-ci:${{ github.sha }}
           cache-from: type=gha
@@ -56,6 +57,7 @@ jobs:
           context: .
           file: Dockerfile
           push: false
+          load: true
           tags: |
             algo-bot-ci:${{ github.sha }}
           cache-from: type=gha
