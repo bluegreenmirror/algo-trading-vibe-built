@@ -1,3 +1,5 @@
+[![CI](https://github.com/YOUR_ORG/YOUR_REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_ORG/YOUR_REPO/actions/workflows/ci.yml)
+
 # algo-trading-vibe-built
 Currently provides no license - demo purposes only
 
