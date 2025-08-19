@@ -1,58 +1,47 @@
-import json
-import subprocess
-import sys
+import unittest
+from unittest.mock import MagicMock, patch
 
-from src.data.providers.alpaca import fetch_bars
-
-
-class FakeRESTClient:
-    def get_bars(self, symbols, timeframe, limit=5):
-        class Bar:
-            def __init__(self, i):
-                self._raw = {
-                    "t": f"2025-01-0{i+1}",
-                    "o": 100 + i,
-                    "c": 101 + i,
-                    "h": 102 + i,
-                    "l": 99 + i,
-                    "v": 1000 + i,
-                }
-
-        return {symbol: [Bar(i) for i in range(limit)] for symbol in symbols}
+import pandas as pd
+from src.config import Settings
+from src.data.providers import get_provider
+from src.data.providers.alpaca import AlpacaDataProvider
+from src.data.providers.fake_alpaca import FakeOrder
+from src.data.providers.mock import MockDataProvider
 
 
-def test_fetch_bars_returns_data():
-    fake_client = FakeRESTClient()
-    data = fetch_bars(["AAPL"], limit=3, client=fake_client)
+class TestDataProviders(unittest.TestCase):
+    def test_mock_provider_get_bars(self):
+        """Test the mock data provider's get_bars method."""
+        provider = MockDataProvider()
+        bars = provider.get_bars("TEST", "2023-01-01", "2023-01-05")
+        self.assertIsInstance(bars, pd.DataFrame)
+        self.assertEqual(len(bars), 4)
 
-    assert "AAPL" in data
-    assert len(data["AAPL"]) == 3
-    assert data["AAPL"][0].o == 100
-    assert hasattr(data["AAPL"][0], "t")
+    def test_mock_provider_submit_order(self):
+        """Test the mock data provider's submit_order method."""
+        provider = MockDataProvider()
+        order = provider.submit_order("TEST", 100, "buy")
+        self.assertIsInstance(order, FakeOrder)
+        self.assertEqual(order.symbol, "TEST")
 
+    def test_get_provider_returns_mock_without_keys(self):
+        """Test get_provider returns MockDataProvider when keys are missing."""
+        mock_settings = MagicMock(spec=Settings)
+        mock_settings.alpaca_key_id = None
+        mock_settings.alpaca_secret_key = None
+        provider = get_provider(settings=mock_settings)
+        self.assertIsInstance(provider, MockDataProvider)
 
-def test_cli_fetch():
-    # This test requires Alpaca credentials to be set in the environment
-    # It will be skipped if they are not present
-    import os
+    @patch("alpaca.trading.client.TradingClient")
+    @patch("alpaca.data.StockHistoricalDataClient")
+    def test_get_provider_returns_alpaca_with_keys(
+        self, mock_data_client, mock_trading_client
+    ):
+        """Test get_provider returns AlpacaDataProvider when keys are present."""
+        mock_settings = MagicMock(spec=Settings)
+        mock_settings.alpaca_key_id = "fake_key"
+        mock_settings.alpaca_secret_key = "fake_secret"
+        mock_settings.alpaca_base_url = "https://paper-api.alpaca.markets"
 
-    if not os.environ.get("ALPACA_KEY_ID") or not os.environ.get("ALPACA_SECRET_KEY"):
-        import pytest
-
-        pytest.skip("Skipping CLI test because Alpaca credentials are not set")
-
-    result = subprocess.run(
-        [sys.executable, "-m", "src.data.providers.alpaca", "fetch", "AAPL", "--limit", "2"],
-        capture_output=True,
-        text=True,
-    )
-
-    assert result.returncode == 0
-    data = json.loads(result.stdout)
-    assert len(data) == 2
-    assert "o" in data[0]
-    assert "h" in data[0]
-    assert "low" in data[0]
-    assert "c" in data[0]
-    assert "v" in data[0]
-    assert "t" in data[0]
+        provider = get_provider(settings=mock_settings)
+        self.assertIsInstance(provider, AlpacaDataProvider)

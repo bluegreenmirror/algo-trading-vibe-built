@@ -15,6 +15,7 @@ callers to manually split the value.  This led to surprising behaviour and
 inconsistent handling of whitespace.  ``Settings`` now exposes ``symbols`` as
 ``list[str]`` and automatically parses any provided string.
 """
+from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -44,7 +45,8 @@ class Settings(BaseSettings):
         env_file=".env", env_file_encoding="utf-8", case_sensitive=False
     )  # load variables from .env with case-insensitive keys
 
+    @computed_field
     @property
     def symbols_list(self) -> list[str]:
-        """Return a list of symbols from the comma-separated string."""
+        """Return a list of symbols, splitting the raw string by commas."""
         return [symbol.strip() for symbol in self.symbols.split(",")]

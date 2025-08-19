@@ -1,125 +1,90 @@
-from __future__ import annotations
+"""Alpaca Market Data Provider"""
+import os
+from typing import Any, Optional
 
-from dataclasses import dataclass
-from typing import Any
-
-from src.config import Settings
-
-try:  # Optional import; tests may inject a fake client
-    from alpaca_trade_api.rest import REST, TimeFrame
-except Exception:  # pragma: no cover
-    REST = object  # type: ignore
-
-    class TimeFrame:  # type: ignore
-        Day = "1Day"
+import pandas as pd
+from src.data.providers.base import DataProvider
 
 
-@dataclass(frozen=True)
-class Bar:
-    t: Any
-    o: float
-    h: float
-    low: float  # Renamed l to low
-    c: float
-    v: float
+class AlpacaDataProvider(DataProvider):
+    """Alpaca market data and trading provider."""
 
-    @classmethod
-    def from_obj(cls, obj: Any) -> Bar:
-        """Normalize API obj OR dict-like (including objects with ._raw) into a Bar dataclass."""
-        # Prefer a dict source if present
-        d = None
-        if isinstance(obj, dict):
-            d = obj
-        elif hasattr(obj, "_raw") and isinstance(obj._raw, dict):
-            d = obj._raw
+    def __init__(self, api_key: str, secret_key: str, paper: bool = True):
+        from alpaca.data import StockHistoricalDataClient
+        from alpaca.trading.client import TradingClient
 
-        if d is not None:
-            return cls(
-                t=d.get("t") or d.get("timestamp") or d.get("time"),
-                o=float(d.get("o", d.get("open", 0.0))),
-                h=float(d.get("h", d.get("high", 0.0))),
-                low=float(d.get("l", d.get("low", 0.0))),
-                c=float(d.get("c", d.get("close", 0.0))),
-                v=float(d.get("v", d.get("volume", 0.0))),
-            )
+        self.data_client = StockHistoricalDataClient(api_key, secret_key)
+        self.trading_client = TradingClient(api_key, secret_key, paper=paper)
+        print(f"✅ Connected to Alpaca API (Paper trading: {paper})")
 
-        # Fallback to attribute-based objects
-        return cls(
-            t=getattr(obj, "t", getattr(obj, "timestamp", getattr(obj, "time", None))),
-            o=float(getattr(obj, "o", getattr(obj, "open", 0.0))),
-            h=float(getattr(obj, "h", getattr(obj, "high", 0.0))),
-            l=float(getattr(obj, "l", getattr(obj, "low", 0.0))),
-            c=float(getattr(obj, "c", getattr(obj, "close", 0.0))),
-            v=float(getattr(obj, "v", getattr(obj, "volume", 0.0))),
+    def get_bars(self, symbol: str, limit: int = 100) -> pd.DataFrame:
+        """Fetch OHLCV bars for a symbol."""
+        from alpaca.data.requests import StockBarsRequest
+        from alpaca.data.timeframe import TimeFrame
+
+        request_params = StockBarsRequest(
+            symbol_or_symbols=[symbol],
+            timeframe=TimeFrame.Day,
+            limit=limit
         )
+        bars = self.data_client.get_stock_bars(request_params)
+        return bars.df
 
+    def submit_order(self, symbol: str, notional: float, side: str) -> Any:
+        """Submit a notional order."""
+        from alpaca.trading.requests import MarketOrderRequest
+        from alpaca.trading.enums import OrderSide, TimeInForce
 
-def _client(settings: Settings) -> REST:
-    if not settings.alpaca_key_id or not settings.alpaca_secret_key:
-        raise RuntimeError(
-            "Missing Alpaca credentials (set ALPACA_KEY_ID and ALPACA_SECRET_KEY in .env)."
+        order_data = MarketOrderRequest(
+            symbol=symbol,
+            notional=notional,
+            side=OrderSide(side.lower()),
+            time_in_force=TimeInForce.DAY
         )
-    return REST(
-        settings.alpaca_key_id,
-        settings.alpaca_secret_key,
-        base_url=settings.alpaca_base_url,
-    )
+        return self.trading_client.submit_order(order_data=order_data)
 
 
-def fetch_bars(
-    symbols: list[str],
-    limit: int = 5,
-    timeframe: Any = None,
-    *,
-    client: REST | None = None,
-    settings: Settings | None = None,
-) -> dict[str, list[Bar]]:
-    """
-    Fetch recent bars for a list of symbols.
-    Returns a dictionary of symbol -> list of `Bar` dataclasses.
-    - Pass `client` to inject a fake client in tests.
-    - If `settings` is None, a new Settings() will be used.
-    """
-    if settings is None:
-        settings = Settings()
+def main():
+    """CLI for testing the AlpacaDataProvider."""
+    import click
 
-    tf = timeframe or getattr(TimeFrame, "Day", "1Day")
-    c = client or _client(settings)
-    bars = c.get_bars(symbols, tf, limit=limit)
-    return {symbol: [Bar.from_obj(b) for b in bar_list] for symbol, bar_list in bars.items()}
+    @click.group()
+    def cli():
+        pass
 
+    @cli.command()
+    @click.argument('symbol')
+    @click.option('--limit', default=10, help='Number of bars to fetch')
+    def fetch(symbol: str, limit: int):
+        """Fetch and display OHLCV bars."""
+        api_key = os.getenv('ALPACA_KEY_ID')
+        secret_key = os.getenv('ALPACA_SECRET_KEY')
+        if not api_key or not secret_key:
+            print("❌ ALPACA_KEY_ID and ALPACA_SECRET_KEY must be set.")
+            return
 
-def submit_order(
-    symbol: str,
-    notional: float,
-    side: str,
-    *,
-    client: REST | None = None,
-    settings: Settings | None = None,
-) -> Any:
-    """
-    Submit a notional order to Alpaca.
+        provider = AlpacaDataProvider(api_key, secret_key)
+        bars = provider.get_bars(symbol, limit)
+        print(bars)
 
-    - Pass `client` to inject a fake client in tests.
-    - If `settings` is None, a new Settings() will be used.
-    """
-    if settings is None:
-        settings = Settings()
+    @cli.command()
+    @click.argument('symbol')
+    @click.argument('notional', type=float)
+    @click.argument('side', type=click.Choice(['buy', 'sell']))
+    def trade(symbol: str, notional: float, side: str):
+        """Submit a paper trade."""
+        api_key = os.getenv('ALPACA_KEY_ID')
+        secret_key = os.getenv('ALPACA_SECRET_KEY')
+        if not api_key or not secret_key:
+            print("❌ ALPACA_KEY_ID and ALPACA_SECRET_KEY must be set.")
+            return
 
-    c = client or _client(settings)
-    order = c.submit_order(
-        symbol=symbol,
-        notional=notional,
-        side=side,
-        type="market",
-        time_in_force="day",
-    )
-    return order
+        provider = AlpacaDataProvider(api_key, secret_key)
+        order = provider.submit_order(symbol, notional, side)
+        print(order)
+
+    cli()
 
 
 if __name__ == "__main__":
-    # Run with `python -m src.data.providers.alpaca`
-    # Requires .env file with ALPACA_KEY_ID and ALPACA_SECRET_KEY
-    print("Placing a $1 notional buy order for SPY...")
-    order = submit_order(symbol="SPY", notional=1, side="buy")
-    print("Order placed:", order)
+    main()
