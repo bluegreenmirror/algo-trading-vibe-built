@@ -1,4 +1,3 @@
-import pytest
 from src.data.providers.alpaca import AlpacaMarketData
 
 

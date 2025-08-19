@@ -1,19 +1,9 @@
-# File: src/data/providers/alpaca.py
-"""
-Alpaca Market Data Provider
-Provides functions to fetch market data from Alpaca's API.
-Supports dependency injection for testing with fake/mock clients.
-"""
-
 from __future__ import annotations
-"""
-Alpaca Market Data Provider
-- Module-level `fetch_bars(...)` for CLI use (returns list[Bar]).
-- Class `AlpacaMarketData` for OO use (returns list[dict] for backward compat with old tests).
-- Supports dependency injection (pass a fake REST client in tests).
-"""
+
 from dataclasses import dataclass
-from typing import Any, List, Optional, Dict
+from typing import Any
+
+from src.config import Settings
 
 try:  # Optional import; tests may inject a fake client
     from alpaca_trade_api.rest import REST, TimeFrame
@@ -22,34 +12,32 @@ except Exception:  # pragma: no cover
     class TimeFrame:  # type: ignore
         Day = "1Day"
 
-from src.config import Settings
-
 
 @dataclass(frozen=True)
 class Bar:
     t: Any
     o: float
     h: float
-    l: float
+    low: float # Renamed l to low
     c: float
     v: float
 
     @classmethod
-    def from_obj(cls, obj: Any) -> "Bar":
+    def from_obj(cls, obj: Any) -> Bar:
         """Normalize API obj OR dict-like (including objects with ._raw) into a Bar dataclass."""
         # Prefer a dict source if present
         d = None
         if isinstance(obj, dict):
             d = obj
-        elif hasattr(obj, "_raw") and isinstance(getattr(obj, "_raw"), dict):
-            d = getattr(obj, "_raw")
+        elif hasattr(obj, "_raw") and isinstance(obj._raw, dict):
+            d = obj._raw
 
         if d is not None:
             return cls(
                 t=d.get("t") or d.get("timestamp") or d.get("time"),
                 o=float(d.get("o", d.get("open", 0.0))),
                 h=float(d.get("h", d.get("high", 0.0))),
-                l=float(d.get("l", d.get("low", 0.0))),
+                low=float(d.get("l", d.get("low", 0.0))),
                 c=float(d.get("c", d.get("close", 0.0))),
                 v=float(d.get("v", d.get("volume", 0.0))),
             )
@@ -82,9 +70,9 @@ def fetch_bars(
     limit: int = 5,
     timeframe: Any = None,
     *,
-    client: Optional[REST] = None,
-    settings: Optional[Settings] = None,
-) -> List[Bar]:
+    client: REST | None = None,
+    settings: Settings | None = None,
+) -> list[Bar]:
     """
     Fetch recent bars for `symbol`.
     Returns a list of `Bar` dataclasses.
@@ -107,11 +95,11 @@ class AlpacaMarketData:
     Prefer using the module-level `fetch_bars` for new code.
     """
 
-    def __init__(self, client: Any = None, settings: Optional[Settings] = None):
+    def __init__(self, client: Any = None, settings: Settings | None = None):
         self.settings = settings or Settings()
         self.client = client or _client(self.settings)
 
-    def fetch_bars(self, symbol: str, timeframe: str = "1Day", limit: int = 5) -> List[Dict]:
+    def fetch_bars(self, symbol: str, timeframe: str = "1Day", limit: int = 5) -> list[dict]:
         bars = fetch_bars(
             symbol=symbol,
             limit=limit,
@@ -121,6 +109,6 @@ class AlpacaMarketData:
         )
         # Convert Bar dataclasses to dicts for compatibility with older tests
         return [
-            {"t": b.t, "o": b.o, "h": b.h, "l": b.l, "c": b.c, "v": b.v}
+            {"t": b.t, "o": b.o, "h": b.h, "l": b.low, "c": b.c, "v": b.v}
             for b in bars
         ]
