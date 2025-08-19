@@ -37,9 +37,14 @@ class Settings(BaseSettings):
     alpaca_key_id: str | None = None  # Alpaca API key ID; defaults to None
     alpaca_secret_key: str | None = None  # Alpaca API secret key; defaults to None
     alpaca_base_url: str = "https://paper-api.alpaca.markets"  # Alpaca API base URL (paper)
-    symbols: list[str] = ["AAPL", "MSFT", "SPY"]  # default asset symbols to trade
+    symbols: str = "AAPL,MSFT,SPY"  # default asset symbols to trade
     schedule_cron: str = "*/5 * * * *"  # cron schedule for main job; every five minutes
 
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", case_sensitive=False
     )  # load variables from .env with case-insensitive keys
+
+    @property
+    def symbols_list(self) -> list[str]:
+        """Return a list of symbols from the comma-separated string."""
+        return [symbol.strip() for symbol in self.symbols.split(",")]
