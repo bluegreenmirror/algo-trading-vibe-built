@@ -2,7 +2,7 @@
 """Application configuration models.
 
 This module provides a small ``Settings`` class used throughout the
-application.  The original project relied on the thirdâparty
+application.  The original project relied on the third-party
 ``pydantic-settings`` package for this purpose.  The execution environment
 for the kata does not include that dependency, so a very small shim version
 of the library is provided under ``src/pydantic_settings``.  The shim only
@@ -20,28 +20,33 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Application settings.
+    """Runtime configuration for the trading application.
 
-    ``symbols`` is exposed as a list for ease of use.  When a comma separated
-    string is supplied (either via environment variables or directly when
-    instantiating the class) the value is split and any surrounding whitespace
-    is removed.
+    Values are loaded from environment variables when present and otherwise
+    fall back to the defaults declared below. ``symbols`` is exposed as a list
+    for ease of use; when a comma separated string is supplied the value is
+    split and surrounding whitespace is removed.
+
+    Example:
+        >>> from config import Settings
+        >>> settings = Settings()
+        >>> settings.symbols
+        ['AAPL', 'MSFT', 'SPY']
     """
 
-    env: str = "dev"
-    alpaca_key_id: str | None = None
-    alpaca_secret_key: str | None = None
-    alpaca_base_url: str = "https://paper-api.alpaca.markets"
-    symbols: list[str] = ["AAPL", "MSFT", "SPY"]
-    schedule_cron: str = "*/5 * * * *"
+    env: str = "dev"  # environment name; defaults to 'dev'
+    alpaca_key_id: str | None = None  # Alpaca API key ID; defaults to None
+    alpaca_secret_key: str | None = None  # Alpaca API secret key; defaults to None
+    alpaca_base_url: str = "https://paper-api.alpaca.markets"  # Alpaca API base URL (paper)
+    symbols: list[str] = ["AAPL", "MSFT", "SPY"]  # default asset symbols to trade
+    schedule_cron: str = "*/5 * * * *"  # cron schedule for main job; every five minutes
 
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", case_sensitive=False
-    )
+    )  # load variables from .env with case-insensitive keys
 
     def __init__(self, **data):  # type: ignore[override]
         """Initialise settings and normalise symbol input."""
-
         super().__init__(**data)
         if isinstance(self.symbols, str):
             self.symbols = [s.strip() for s in self.symbols.split(",") if s.strip()]
