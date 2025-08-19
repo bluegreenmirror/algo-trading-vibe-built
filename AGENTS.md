@@ -17,6 +17,7 @@
 
 ## Best practices
 - Reference `.pre-commit-config.yaml` for linting and formatting.
+- Run `pre-commit run --files <file> [<file> ...]` to check staged files.
 - Run tests or demo scripts before each commit.
 - Propose improvements and note outstanding work for future sprints.
 - Follow PEP 8 naming and formatting guidelines.
