@@ -67,16 +67,16 @@ def _client(settings: Settings) -> REST:
 
 
 def fetch_bars(
-    symbol: str,
+    symbols: list[str],
     limit: int = 5,
     timeframe: Any = None,
     *,
     client: REST | None = None,
     settings: Settings | None = None,
-) -> list[Bar]:
+) -> dict[str, list[Bar]]:
     """
-    Fetch recent bars for `symbol`.
-    Returns a list of `Bar` dataclasses.
+    Fetch recent bars for a list of symbols.
+    Returns a dictionary of symbol -> list of `Bar` dataclasses.
     - Pass `client` to inject a fake client in tests.
     - If `settings` is None, a new Settings() will be used.
     """
@@ -85,28 +85,41 @@ def fetch_bars(
 
     tf = timeframe or getattr(TimeFrame, "Day", "1Day")
     c = client or _client(settings)
-    bars = c.get_bars(symbol, tf, limit=limit)
-    return [Bar.from_obj(b) for b in bars]
+    bars = c.get_bars(symbols, tf, limit=limit)
+    return {symbol: [Bar.from_obj(b) for b in bar_list] for symbol, bar_list in bars.items()}
 
 
-class AlpacaMarketData:
+def submit_order(
+    symbol: str,
+    notional: float,
+    side: str,
+    *, 
+    client: REST | None = None,
+    settings: Settings | None = None,
+) -> Any:
     """
-    OO wrapper retained for backward compatibility with older tests.
-    This returns list[dict] to match earlier expectations (keys: t,o,h,l,c,v).
-    Prefer using the module-level `fetch_bars` for new code.
+    Submit a notional order to Alpaca.
+
+    - Pass `client` to inject a fake client in tests.
+    - If `settings` is None, a new Settings() will be used.
     """
+    if settings is None:
+        settings = Settings()
 
-    def __init__(self, client: Any = None, settings: Settings | None = None):
-        self.settings = settings or Settings()
-        self.client = client or _client(self.settings)
+    c = client or _client(settings)
+    order = c.submit_order(
+        symbol=symbol,
+        notional=notional,
+        side=side,
+        type="market",
+        time_in_force="day",
+    )
+    return order
 
-    def fetch_bars(self, symbol: str, timeframe: str = "1Day", limit: int = 5) -> list[dict]:
-        bars = fetch_bars(
-            symbol=symbol,
-            limit=limit,
-            timeframe=timeframe,
-            client=self.client,
-            settings=self.settings,
-        )
-        # Convert Bar dataclasses to dicts for compatibility with older tests
-        return [{"t": b.t, "o": b.o, "h": b.h, "l": b.low, "c": b.c, "v": b.v} for b in bars]
+
+if __name__ == "__main__":
+    # Run with `python -m src.data.providers.alpaca`
+    # Requires .env file with ALPACA_KEY_ID and ALPACA_SECRET_KEY
+    print("Placing a $1 notional buy order for SPY...")
+    order = submit_order(symbol="SPY", notional=1, side="buy")
+    print("Order placed:", order)

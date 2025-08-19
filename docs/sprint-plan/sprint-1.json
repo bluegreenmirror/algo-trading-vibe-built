@@ -35,7 +35,7 @@
             "description": "Implement data provider module with function to fetch OHLCV bars for a symbol.",
             "schedule_day": 3,
             "definition_of_done": "`python -m src.data.providers.alpaca fetch AAPL` prints OHLCV bars to console.",
-            "status": "in_progress"
+            "status": "complete"
           },
           {
             "id": "S1-E2-I2",

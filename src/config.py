@@ -15,7 +15,6 @@ callers to manually split the value.  This led to surprising behaviour and
 inconsistent handling of whitespace.  ``Settings`` now exposes ``symbols`` as
 ``list[str]`` and automatically parses any provided string.
 """
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -44,9 +43,3 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", case_sensitive=False
     )  # load variables from .env with case-insensitive keys
-
-    def __init__(self, **data):  # type: ignore[override]
-        """Initialise settings and normalise symbol input."""
-        super().__init__(**data)
-        if isinstance(self.symbols, str):
-            self.symbols = [s.strip() for s in self.symbols.split(",") if s.strip()]
