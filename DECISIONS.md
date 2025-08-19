@@ -1,0 +1,76 @@
+# Key Decisions
+
+This document records the key architectural and technical decisions made during the development of the Algo Trading Bot MVP.
+
+- **SQLite over Postgres**: Simplicity for MVP; single-file state is portable.
+- **Docker Compose**: Standard, easy to use, and sufficient for single-service MVP.
+- **`.env` over YAML**: Simpler for secrets; YAML for non-secret config.
+- **Structured JSON logs**: Machine-readable, easy to parse, and sink to any backend.
+- **Idempotency via Hashing**: Simple, stateless way to prevent duplicate orders.
+- **Fail-Closed Design**: Prioritizes safety over liveness.
+- **Single-Writer Lock**: Prevents race conditions in live trading loop.
+- **Mermaid Diagrams**: Clear, maintainable, and git-friendly.
+- **Makefile & Doctor Script**: Improves developer experience and reduces setup friction.
+- **Artifacts Directory**: Centralizes outputs for easy access and CI integration.
+- **Daily Timeframe**: Simplifies initial logic and reduces data volume.
+- **Paper Trading First**: Validates logic without real financial risk.
+- **Conventional Commits**: Standardizes commit history for better readability and automation.
+- **Pre-commit Hooks**: Enforces code quality and prevents secret leaks.
+- **CI/CD Pipeline**: Automates testing and builds for reliable releases.
+- **Semantic Versioning**: Clearly communicates the impact of changes.
+- **GitHub Actions**: Integrated CI/CD for seamless workflow.
+- **Ruff & Black**: Enforces consistent code style and quality.
+- **Poetry**: Manages dependencies for reproducible builds.
+- **Pytest**: Standard testing framework for Python.
+- **FastAPI/Flask (Optional)**: Lightweight web framework for future dashboard.
+- **Single Service MVP**: Reduces complexity and focuses on core functionality.
+- **Alpaca API**: Well-documented and provides a free paper trading environment.
+- **SMA Crossover**: Simple, well-understood strategy for initial implementation.
+- **Policy Engine**: Centralizes risk management for safety and clarity.
+- **Backtester**: Essential for strategy validation and iteration.
+- **CLI Interface**: Provides a simple way to interact with the bot.
+- **GitHub Releases**: Manages releases and automates image publishing.
+- **GHCR**: GitHub Container Registry for storing Docker images.
+- **Dependabot**: Automates dependency updates for security.
+- **CodeQL**: Static analysis for identifying security vulnerabilities.
+- **Secrets Scanning**: Prevents accidental exposure of sensitive information.
+- **Issue Templates**: Standardizes bug reports and feature requests.
+- **Pull Request Templates**: Provides context for changes and ensures quality.
+- **Community Health Files**: Encourages contributions and sets expectations.
+- **License (None)**: Demo purposes only; no license provided.
+- **README**: Provides clear instructions for setup and usage.
+- **GEMINI.md**: Guidelines for interacting with the Gemini AI assistant.
+- **CONTRIBUTING.md**: Guidelines for contributing to the project.
+- **AGENTS.md**: Information about the AI agents used in the project.
+- **.dockerignore**: Excludes unnecessary files from the Docker build context.
+- **.gitignore**: Excludes unnecessary files from version control.
+- **.editorconfig**: Enforces consistent coding styles across different editors.
+- **.pre-commit-config.yaml**: Configures pre-commit hooks for automated checks.
+- **.secrets.baseline**: Baseline for the `detect-secrets` tool.
+- **pyproject.toml**: Configuration file for Poetry and other Python tools.
+- **docker-compose.yml**: Defines the services, networks, and volumes for Docker Compose.
+- **Dockerfile**: Defines the steps to build the Docker image.
+- **makefile**: Defines common tasks for the project.
+- **src/**: Contains the source code for the project.
+- **tests/**: Contains the tests for the project.
+- **docs/**: Contains the documentation for the project.
+- **scripts/**: Contains helper scripts for the project.
+- **.devcontainer/**: Contains the configuration for the dev container.
+- **.github/**: Contains the configuration for GitHub Actions and other GitHub features.
+- **.pytest_cache/**: Cache directory for pytest.
+- **.ruff_cache/**: Cache directory for Ruff.
+- **.vscode/**: Contains settings and extensions for VS Code.
+- **.git/**: Contains the Git repository.
+- **.env.example**: Example environment file.
+- **.secrets.baseline**: Baseline for the `detect-secrets` tool.
+- **AGENTS.md**: Information about the AI agents used in the project.
+- **CONTRIBUTING.md**: Guidelines for contributing to the project.
+- **GEMINI.md**: Guidelines for interacting with the Gemini AI assistant.
+- **LICENSE**: License for the project.
+- **README.md**: Provides clear instructions for setup and usage.
+- **pyproject.toml**: Configuration file for Poetry and other Python tools.
+- **docker-compose.yml**: Defines the services, networks, and volumes for Docker Compose.
+- **Dockerfile**: Defines the steps to build the Docker image.
+- **makefile**: Defines common tasks for the project.
+- **src/**: Contains the source code for the project.
+- **tests/**: Contains the tests for the project.
