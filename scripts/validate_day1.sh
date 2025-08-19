@@ -1,5 +1,6 @@
-# scripts/validate_day1.sh
 #!/usr/bin/env bash
+# Validate required files and tooling for the Day 1 project setup.
+# Usage: ./scripts/validate_day1.sh
 set -euo pipefail
 
 RED=$'\e[31m'; GREEN=$'\e[32m'; YELLOW=$'\e[33m'; NC=$'\e[0m'
