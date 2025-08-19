@@ -1,56 +1,36 @@
 [![CI](https://github.com/YOUR_ORG/YOUR_REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_ORG/YOUR_REPO/actions/workflows/ci.yml)
 
-# algo-trading-vibe-built
-Currently provides no license - demo purposes only
+# Algo Trading Bot
 
-# Algo Trading Bot — Sprint 1 (Day 1)
+This repository contains the Algo Trading Bot, an MVP designed for paper trading via the Alpaca API. It features a robust strategy engine, a comprehensive policy engine for risk management, a minimal backtester, and structured logging for auditability.
 
-Minimal, **secure** scaffold to start Sprint 1 without leaking secrets.
+## Getting Started
 
-## Containerized Quickstart (no Poetry on host required)
+To set up your development environment and get a quick overview of the project, please refer to our [Getting Started Guide](GETTING_STARTED.md).
 
-```bash
-# 1) Build the image
-docker compose build
+## Key Features
 
-# 2) Create local .env (never commit!)
-cp .env.example .env
-# fill ALPACA_... later
+*   **Alpaca Integration**: Connects to Alpaca Market Data and Paper Trading APIs.
+*   **Strategy Engine**: Implements an SMA crossover strategy (configurable).
+*   **Policy Engine**: Enforces risk controls, including max notional checks, position limits, and daily loss caps.
+*   **Backtesting Framework**: Allows for reproducible backtesting with historical data.
+*   **Structured Logging**: Provides detailed audit trails of all decisions and actions.
+*   **Containerized Development**: Uses Docker and Docker Compose for consistent environments.
 
-# 3) Run CLI via Docker
-./scripts/run.sh --help
-./scripts/run.sh hello
+## Documentation
 
-# 4) Update image when dependencies change
-./scripts/update.sh
-```
-
-## Quickstart with Poetry (optional)
-
-```bash
-# Install Poetry if you don't have it
-# pipx install poetry
-
-poetry install
-poetry run pre-commit install
-
-# Create your local env file (never commit .env)
-cp .env.example .env
-# Fill in ALPACA_KEY_ID / ALPACA_SECRET_KEY later (Day 3–4)
-
-# Run tests
-poetry run pytest -q
-
-# CLI
-poetry run python -m src.app --help
-poetry run python -m src.app hello
-```
+*   [**Getting Started**](GETTING_STARTED.md): Your first stop for setting up and understanding the project.
+*   [**Key Decisions**](DECISIONS.md): Dive into the architectural and technical decisions that shaped this project.
+*   [**Gemini Guidelines**](GEMINI.md): Specific guidelines for interacting with the Gemini AI assistant on this project.
+*   [**Architecture**](docs/architecture.md): High-level system architecture and component interactions.
+*   [**Technical Design**](docs/technical_design.md): Detailed technical specifications, data models, and algorithms.
+*   [**Sprint Plans**](docs/sprint-plan/): Overview of project sprints and development roadmap.
+*   [**Contributing**](CONTRIBUTING.md): Guidelines for contributing to the project.
+*   [**Agents**](AGENTS.md): Information about the AI agents used in the project.
 
 ## Development Workflow
 
-- Run `make doctor` or `scripts/doctor.sh` to verify your environment.
-- Before committing, execute `make lint`, `make fmt`, and `make test`.
-- Use `scripts/validate_day1.sh` for a full checklist.
+For details on linting, formatting, testing, and commit message conventions, please refer to the [Getting Started Guide](GETTING_STARTED.md) and [Gemini Guidelines](GEMINI.md).
 
 ## Key Environment Variables
 
@@ -68,3 +48,5 @@ poetry run python -m src.app hello
 - Pre-commit hooks provide formatting, linting, and secret scanning.
 - CI builds & tests **inside Docker**.
 - Tagging a release like `v1.0.0` will build & push a container image to **GHCR**.
+
+Currently provides no license - demo purposes only.

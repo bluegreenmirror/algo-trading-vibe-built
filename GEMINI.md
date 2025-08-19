@@ -64,3 +64,40 @@ This project uses [Black](https://github.com/psf/black) for code formatting and 
 - **Linting**: Use `make lint` to identify and fix potential issues.
 
 **Why this is needed**: A consistent code style improves readability and maintainability. By automating this process, we reduce the cognitive load on developers and allow them to focus on the logic of their code.
+
+## 8. Interacting with AI Agents
+
+This section provides guidelines for AI agents (like Gemini) to effectively interact with this project and its human contributors. Adhering to these guidelines will ensure smoother collaboration and faster task completion.
+
+### 8.1 Providing Context
+
+When performing tasks, always strive to provide sufficient context. This includes:
+
+*   **File Paths**: Use absolute file paths when referring to files.
+*   **Code Snippets**: When discussing code, provide relevant snippets with line numbers if possible.
+*   **Tool Usage**: Clearly state which tool you are using and why.
+*   **Assumptions**: Explicitly state any assumptions you are making.
+
+### 8.2 Asking Questions
+
+When you need clarification or more information, ask clear, concise, and specific questions. Avoid vague or open-ended questions. For example, instead of "What should I do?", ask "Should I implement feature X using Y library or Z library?"
+
+### 8.3 Proposing Changes
+
+Before making significant changes, propose your plan to the user. This allows for feedback and ensures alignment with the project's goals. When proposing changes, consider:
+
+*   **Impact**: Explain the potential impact of your changes.
+*   **Alternatives**: If applicable, present alternative approaches and their trade-offs.
+*   **Verification**: Describe how you plan to verify your changes (e.g., running tests, linting).
+
+### 8.4 Error Handling
+
+If you encounter an error, provide detailed information, including:
+
+*   **Error Message**: The full error message and stack trace.
+*   **Context**: The actions that led to the error.
+*   **Troubleshooting Steps**: Any steps you have already taken to resolve the issue.
+
+### 8.5 Learning and Adapting
+
+Continuously learn from interactions and adapt your approach based on feedback. Pay attention to implicit cues and user preferences to improve your performance over time.
