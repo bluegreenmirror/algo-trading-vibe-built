@@ -48,7 +48,7 @@ class Bar:
             t=getattr(obj, "t", getattr(obj, "timestamp", getattr(obj, "time", None))),
             o=float(getattr(obj, "o", getattr(obj, "open", 0.0))),
             h=float(getattr(obj, "h", getattr(obj, "high", 0.0))),
-            l=float(getattr(obj, "l", getattr(obj, "low", 0.0))),
+            low=float(getattr(obj, "l", getattr(obj, "low", 0.0))),
             c=float(getattr(obj, "c", getattr(obj, "close", 0.0))),
             v=float(getattr(obj, "v", getattr(obj, "volume", 0.0))),
         )
@@ -67,7 +67,7 @@ def _client(settings: Settings) -> REST:
 
 
 def fetch_bars(
-    symbols: list[str],
+    symbol: str,
     limit: int = 5,
     timeframe: Any = None,
     *,
@@ -85,7 +85,7 @@ def fetch_bars(
 
     tf = timeframe or getattr(TimeFrame, "Day", "1Day")
     c = client or _client(settings)
-    bars = c.get_bars(symbols, tf, limit=limit)
+    bars = c.get_bars(symbol, tf, limit=limit)
     return {symbol: [Bar.from_obj(b) for b in bar_list] for symbol, bar_list in bars.items()}
 
 

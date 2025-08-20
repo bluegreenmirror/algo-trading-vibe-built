@@ -41,7 +41,7 @@ def fetch_bars_cmd(symbol: str, limit: int):
         rows = fetch_bars(symbol=symbol, limit=limit)
         click.echo(f"Fetched {len(rows)} bars for {symbol}")
         for r in rows:
-            click.echo(f"{r.t} o={r.o} h={r.h} l={r.l} c={r.c} v={r.v}")
+            click.echo(f"{r.t} o={r.o} h={r.h} l={r.low} c={r.c} v={r.v}")
     except Exception as e:
         click.echo(f"Error fetching bars: {e}", err=True)
         raise SystemExit(1) from e

@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  app:
+    # Explicitly override the entrypoint to be empty.
+    # This prevents any default entrypoint from the Dockerfile from running.
+    entrypoint: []
+
+    # This command will now be the only thing that runs, keeping the container alive.
+    command: sleep infinity
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    ports:
+      - "5678:5678" # For debugging

@@ -30,14 +30,14 @@ class Settings(BaseSettings):
         >>> from config import Settings
         >>> settings = Settings()
         >>> settings.symbols
-        ['AAPL', 'MSFT', 'SPY']
+        "'AAPL', 'MSFT', 'SPY'"
     """
 
     env: str = "dev"  # environment name; defaults to 'dev'
     alpaca_key_id: str | None = None  # Alpaca API key ID; defaults to None
     alpaca_secret_key: str | None = None  # Alpaca API secret key; defaults to None
     alpaca_base_url: str = "https://paper-api.alpaca.markets"  # Alpaca API base URL (paper)
-    symbols: list[str] = ["AAPL", "MSFT", "SPY"]  # default asset symbols to trade
+    symbols: str = '"AAPL", "MSFT", "SPY"'  # default asset symbols to trade
     schedule_cron: str = "*/5 * * * *"  # cron schedule for main job; every five minutes
 
     model_config = SettingsConfigDict(
