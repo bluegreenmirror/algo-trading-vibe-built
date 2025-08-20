@@ -1,19 +1,29 @@
 {
-    "name": "Algo Bot (Python 3.13-slim)",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": "."
-    },
-    "remoteUser": "root",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-python.python",
-                "ms-python.vscode-pylance",
-                "ms-azuretools.vscode-docker",
-                "editorconfig.editorconfig"
-            ]
-        }
-    },
-    "postCreateCommand": "python -V && python -m pip --version"
+  "name": "algo-bot-dev",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "docker-compose.override.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/app",
+  // This is critical. It tells VS Code not to inject its own startup command.
+  "overrideCommand": false,
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.analysis.extraPaths": [
+          "src"
+        ],
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "postCreateCommand": "bash -lc 'if [ -f pyproject.toml ]; then poetry install; else echo \"[devcontainer] pyproject.toml not found at /app; skipping poetry install\"; fi'",
+  "remoteUser": "root"
 }

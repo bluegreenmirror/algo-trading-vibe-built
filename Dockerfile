@@ -1,12 +1,12 @@
 # Dev/Run Image
-FROM python:3.13-slim
+FROM python:3.13-slim AS base
 
 WORKDIR /app
 
 # System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential curl git ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+  build-essential curl git ca-certificates && \
+  rm -rf /var/lib/apt/lists/*
 
 # Install Poetry in the image (no need on host)
 ARG POETRY_VERSION=1.8.3
@@ -15,12 +15,12 @@ RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
 
 # Environment: deterministic + unbuffered I/O
 ENV POETRY_VIRTUALENVS_CREATE=false \
-    POETRY_NO_INTERACTION=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PYTHONPATH=/app
+  POETRY_NO_INTERACTION=1 \
+  PYTHONUNBUFFERED=1 \
+  PYTHONDONTWRITEBYTECODE=1 \
+  PIP_DISABLE_PIP_VERSION_CHECK=1 \
+  PIP_NO_CACHE_DIR=1 \
+  PYTHONPATH=/app
 
 # Copy metadata first (better layer caching)
 COPY pyproject.toml README.md .pre-commit-config.yaml .secrets.baseline ./

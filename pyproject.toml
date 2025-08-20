@@ -24,6 +24,7 @@ black = "^24.4.2"
 mypy = "^1.10.0"
 pre-commit = "^3.7.0"
 detect-secrets = "^1.4.0"
+debugpy = "^1.8.16"
 
 [tool.ruff]
 line-length = 100
