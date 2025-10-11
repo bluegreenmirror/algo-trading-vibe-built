@@ -8,7 +8,7 @@ class BaseSettings:
     def __init__(self, **data):
         # apply class defaults
         for name, value in self.__class__.__dict__.items():
-            if name.startswith("_") or callable(value):
+            if name.startswith("_") or callable(value) or isinstance(value, property):
                 continue
             setattr(self, name, value)
         # override with provided values
