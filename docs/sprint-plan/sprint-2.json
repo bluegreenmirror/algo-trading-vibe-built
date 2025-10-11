@@ -1,6 +1,6 @@
 {
   "sprint": {
-    "name": "Sprint 2 — Backtesting & Risk Enhancements",
+    "name": "Sprint 2 - Backtesting & Risk Enhancements",
     "duration_weeks": 3,
     "milestone": "v0.2.0-beta",
     "goal": "Introduce a reproducible backtesting workflow, extend the Policy Engine (position limits, daily loss cap), and add basic PnL/positions tracking with CLI reporting.",
@@ -13,16 +13,19 @@
             "title": "SQLite schema & migration script",
             "description": "Create SQLite tables for ohlcv, positions, orders, executions, pnl_snapshots, audit_log. Provide migration script.",
             "schedule_day": 1,
-            "definition_of_done": "Running migration creates all tables; PR includes schema SQL and docs snippet."
+            "definition_of_done": "Running migration creates all tables; PR includes schema SQL and docs snippet.",
+            "status": "not-started"
           },
           {
             "id": "S2-E1-I2",
-            "title": "Data loader for OHLCV (CSV → SQLite)",
+            "title": "Data loader for OHLCV (CSV \u2192 SQLite)",
             "description": "CLI to ingest historical CSV bars into SQLite (symbol, ts, open, high, low, close, volume).",
             "schedule_day": 2,
-            "definition_of_done": "`python -m src.data.storage load --csv data/AAPL.csv --symbol AAPL` populates rows; counts printed."
+            "definition_of_done": "`python -m src.data.storage load --csv data/AAPL.csv --symbol AAPL` populates rows; counts printed.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "Backtesting Engine (Core)",
@@ -32,42 +35,49 @@
             "title": "Backtest loop & signal evaluation",
             "description": "Implement vectorized/iterative loop: read bars from SQLite, run SMA strategy, produce signal stream.",
             "schedule_day": 3,
-            "definition_of_done": "Backtest returns signal count and sample preview for given date range."
+            "definition_of_done": "Backtest returns signal count and sample preview for given date range.",
+            "status": "not-started"
           },
           {
             "id": "S2-E2-I2",
             "title": "Order simulation & fills",
             "description": "Simulate market orders at next bar open; record executions and update positions.",
             "schedule_day": 4,
-            "definition_of_done": "Executions persisted; positions updated; unit tests cover buy→sell round trip."
+            "definition_of_done": "Executions persisted; positions updated; unit tests cover buy\u2192sell round trip.",
+            "status": "not-started"
           },
           {
             "id": "S2-E2-I3",
             "title": "Backtest metrics (PnL, max DD, win rate)",
             "description": "Compute basic metrics and equity curve; return JSON report + CSV equity curve.",
             "schedule_day": 5,
-            "definition_of_done": "Backtest outputs JSON with pnl/max_drawdown/win_rate and writes equity_curve.csv."
+            "definition_of_done": "Backtest outputs JSON with pnl/max_drawdown/win_rate and writes equity_curve.csv.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
-        "name": "Policy Engine — Extended Limits",
+        "name": "Policy Engine \u2014 Extended Limits",
         "issues": [
           {
             "id": "S2-E3-I1",
             "title": "Position limit per symbol",
             "description": "Block orders that would exceed per-symbol notional cap.",
             "schedule_day": 6,
-            "definition_of_done": "Unit test: order exceeding cap returns status=blocked with violation=per_symbol_limit."
+            "definition_of_done": "Unit test: order exceeding cap returns status=blocked with violation=per_symbol_limit.",
+            "status": "not-started"
           },
           {
             "id": "S2-E3-I2",
             "title": "Daily loss (drawdown) cap",
             "description": "Block new orders when daily PnL < -daily_max_drawdown.",
             "schedule_day": 7,
-            "definition_of_done": "Unit test simulating negative day PnL yields blocked decision with violation=daily_drawdown."
+            "definition_of_done": "Unit test simulating negative day PnL yields blocked decision with violation=daily_drawdown.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "PnL & Positions Tracking",
@@ -77,16 +87,19 @@
             "title": "Positions model & updater",
             "description": "Single source of truth for current position qty and average cost per symbol.",
             "schedule_day": 8,
-            "definition_of_done": "After simulated fills, positions reflect correct qty/avg_cost in SQLite."
+            "definition_of_done": "After simulated fills, positions reflect correct qty/avg_cost in SQLite.",
+            "status": "not-started"
           },
           {
             "id": "S2-E4-I2",
             "title": "Daily PnL snapshot",
             "description": "Write end-of-day (or end-of-run) PnL rows to pnl_snapshots table.",
             "schedule_day": 9,
-            "definition_of_done": "Snapshot rows created with realized/unrealized PnL; unit test verifies totals."
+            "definition_of_done": "Snapshot rows created with realized/unrealized PnL; unit test verifies totals.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "CLI & Reporting",
@@ -96,16 +109,19 @@
             "title": "Backtest CLI command",
             "description": "Add CLI: `backtest --symbols AAPL --start 2023-01-01 --end 2023-12-31 --strat sma`",
             "schedule_day": 10,
-            "definition_of_done": "Command runs end-to-end; prints metrics JSON path and equity curve path."
+            "definition_of_done": "Command runs end-to-end; prints metrics JSON path and equity curve path.",
+            "status": "not-started"
           },
           {
             "id": "S2-E5-I2",
             "title": "Report artifact & README snippet",
             "description": "Save metrics JSON and equity curve CSV under artifacts/backtests/<timestamp>/; document usage in README.",
             "schedule_day": 11,
-            "definition_of_done": "Artifacts folder contains JSON + CSV files; README shows example run and outputs."
+            "definition_of_done": "Artifacts folder contains JSON + CSV files; README shows example run and outputs.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "Validation & Docs",
@@ -115,16 +131,19 @@
             "title": "Benchmark vs SPY (sanity run)",
             "description": "Run backtest on AAPL and SPY for 12 months; compare strategy returns to SPY buy/hold baseline.",
             "schedule_day": 12,
-            "definition_of_done": "Benchmark table included in artifacts; README updated with results summary."
+            "definition_of_done": "Benchmark table included in artifacts; README updated with results summary.",
+            "status": "not-started"
           },
           {
             "id": "S2-E6-I2",
             "title": "Sprint 2 Review & Documentation",
             "description": "Summarize changes, update architecture.md (backtest path), and add RUNBOOK backtesting section.",
             "schedule_day": 13,
-            "definition_of_done": "Docs updated; reviewers can reproduce the backtest and locate artifacts."
+            "definition_of_done": "Docs updated; reviewers can reproduce the backtest and locate artifacts.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       }
     ]
   }
