@@ -1,6 +1,6 @@
 {
   "sprint": {
-    "name": "Sprint 2 \u2014 Backtesting & Risk Enhancements",
+    "name": "Sprint 2 - Backtesting & Risk Enhancements",
     "duration_weeks": 3,
     "milestone": "v0.2.0-beta",
     "goal": "Introduce a reproducible backtesting workflow, extend the Policy Engine (position limits, daily loss cap), and add basic PnL/positions tracking with CLI reporting.",

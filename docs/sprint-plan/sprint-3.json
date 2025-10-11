@@ -1,6 +1,6 @@
 {
   "sprint": {
-    "name": "Sprint 3 \u2014 Observability & Configurable Strategies",
+    "name": "Sprint 3 - Observability & Configurable Strategies",
     "duration_weeks": 3,
     "milestone": "v1.0.0-MVP",
     "goal": "Deliver MVP with multiple strategy options, policy configuration, observability (logs, CLI dashboard), and deploy automation.",

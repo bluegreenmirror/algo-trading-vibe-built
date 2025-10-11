@@ -1,7 +1,7 @@
 {
   "sprints": [
     {
-      "name": "Sprint 1 \u2014 Foundation & First Paper Trade",
+      "name": "Sprint 1 - Foundation & First Paper Trade",
       "duration_weeks": 3,
       "milestone": "v0.1.0-alpha",
       "goal": "Deliver a working bot skeleton that can fetch market data, run SMA strategy, enforce basic policy, and place paper trades.",
@@ -18,7 +18,7 @@
       "progress": "Dev environment ready and Alpaca helpers stubbed; strategy/policy/logging work outstanding."
     },
     {
-      "name": "Sprint 2 \u2014 Backtesting & Risk Enhancements",
+      "name": "Sprint 2 - Backtesting & Risk Enhancements",
       "duration_weeks": 3,
       "milestone": "v0.2.0-beta",
       "goal": "Introduce backtesting framework and expand risk controls.",
@@ -34,7 +34,7 @@
       "progress": "Blocked on Sprint 1 delivering core trading loop."
     },
     {
-      "name": "Sprint 3 \u2014 Observability & Configurable Strategies",
+      "name": "Sprint 3 - Observability & Configurable Strategies",
       "duration_weeks": 3,
       "milestone": "v1.0.0-MVP",
       "goal": "Deliver full MVP with observability, configurable policies, and deployment automation.",

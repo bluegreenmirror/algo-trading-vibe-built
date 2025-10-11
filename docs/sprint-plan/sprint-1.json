@@ -1,6 +1,6 @@
 {
   "sprint": {
-    "name": "Sprint 1 \u2014 Foundation & First Paper Trade",
+    "name": "Sprint 1 - Foundation & First Paper Trade",
     "duration_weeks": 3,
     "milestone": "v0.1.0-alpha",
     "goal": "Deliver a working bot skeleton that can fetch market data, run SMA strategy, enforce basic policy, and place paper trades.",
