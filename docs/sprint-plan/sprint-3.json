@@ -1,8 +1,6 @@
-
-
 {
   "sprint": {
-    "name": "Sprint 3 — Observability & Configurable Strategies",
+    "name": "Sprint 3 \u2014 Observability & Configurable Strategies",
     "duration_weeks": 3,
     "milestone": "v1.0.0-MVP",
     "goal": "Deliver MVP with multiple strategy options, policy configuration, observability (logs, CLI dashboard), and deploy automation.",
@@ -15,16 +13,19 @@
             "title": "Config-driven strategy selection",
             "description": "Support multiple strategies (SMA, EMA, buy-and-hold stub) selectable via config.yml.",
             "schedule_day": 1,
-            "definition_of_done": "Config.yml contains 'strategy: sma/ema/buyhold'; CLI run respects strategy choice."
+            "definition_of_done": "Config.yml contains 'strategy: sma/ema/buyhold'; CLI run respects strategy choice.",
+            "status": "not-started"
           },
           {
             "id": "S3-E1-I2",
             "title": "Strategy interface refactor",
             "description": "Refactor strategy into pluggable interface class with eval_signals method.",
             "schedule_day": 2,
-            "definition_of_done": "All strategies implement IStrategy interface; backtest and live run accept any strategy."
+            "definition_of_done": "All strategies implement IStrategy interface; backtest and live run accept any strategy.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "Policy Configuration",
@@ -34,16 +35,19 @@
             "title": "Configurable policy thresholds",
             "description": "Move per-symbol and daily risk limits into config.yml with validation.",
             "schedule_day": 3,
-            "definition_of_done": "Editing config.yml updates runtime policy enforcement; validation errors printed on load."
+            "definition_of_done": "Editing config.yml updates runtime policy enforcement; validation errors printed on load.",
+            "status": "not-started"
           },
           {
             "id": "S3-E2-I2",
             "title": "Config schema & documentation",
             "description": "Document config.yml fields and provide example config files.",
             "schedule_day": 4,
-            "definition_of_done": "README contains annotated config.yml example; config schema defined in code."
+            "definition_of_done": "README contains annotated config.yml example; config schema defined in code.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "Observability & Dashboard",
@@ -53,23 +57,27 @@
             "title": "Health checks",
             "description": "Add periodic checks for API connectivity and config load errors; log status.",
             "schedule_day": 5,
-            "definition_of_done": "Health check runs every N minutes; failures log to structured log with error_code."
+            "definition_of_done": "Health check runs every N minutes; failures log to structured log with error_code.",
+            "status": "not-started"
           },
           {
             "id": "S3-E3-I2",
             "title": "CLI dashboard for trades & PnL",
             "description": "Implement CLI 'report' command: shows trade history, open positions, and cumulative PnL.",
             "schedule_day": 6,
-            "definition_of_done": "`python -m cli report` outputs readable summary table from SQLite data."
+            "definition_of_done": "`python -m cli report` outputs readable summary table from SQLite data.",
+            "status": "not-started"
           },
           {
             "id": "S3-E3-I3",
             "title": "Optional lightweight web dashboard",
             "description": "If time allows, add FastAPI/Flask web UI to view trades and metrics in browser.",
             "schedule_day": 7,
-            "definition_of_done": "Start server with `python -m web.dashboard`; browser shows trades table and metrics JSON."
+            "definition_of_done": "Start server with `python -m web.dashboard`; browser shows trades table and metrics JSON.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "Deployment & Ops",
@@ -79,16 +87,19 @@
             "title": "Deployment script",
             "description": "Write update.sh script to rebuild Docker image, restart container, and run migrations.",
             "schedule_day": 8,
-            "definition_of_done": "`./scripts/update.sh` rebuilds image, runs migrations, restarts bot container."
+            "definition_of_done": "`./scripts/update.sh` rebuilds image, runs migrations, restarts bot container.",
+            "status": "not-started"
           },
           {
             "id": "S3-E4-I2",
             "title": "Version tagging",
             "description": "Tag Docker images and releases with version numbers (semver) and push to registry.",
             "schedule_day": 9,
-            "definition_of_done": "Running CI pipeline produces docker image 'algo-bot:v1.0.0' pushed to registry."
+            "definition_of_done": "Running CI pipeline produces docker image 'algo-bot:v1.0.0' pushed to registry.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       },
       {
         "name": "Documentation & Validation",
@@ -98,16 +109,19 @@
             "title": "Docs update & final runbook",
             "description": "Finalize documentation: architecture updates, strategy usage, config setup, deployment runbook.",
             "schedule_day": 10,
-            "definition_of_done": "Docs folder contains runbook.md and updated architecture.md; README has usage examples."
+            "definition_of_done": "Docs folder contains runbook.md and updated architecture.md; README has usage examples.",
+            "status": "not-started"
           },
           {
             "id": "S3-E5-I2",
             "title": "MVP validation run",
             "description": "Run 1-week paper trading with multiple strategies; compare live vs. backtest performance.",
             "schedule_day": 11,
-            "definition_of_done": "Artifacts include metrics, logs, and summary report; consistency validated in review."
+            "definition_of_done": "Artifacts include metrics, logs, and summary report; consistency validated in review.",
+            "status": "not-started"
           }
-        ]
+        ],
+        "status": "not-started"
       }
     ]
   }
