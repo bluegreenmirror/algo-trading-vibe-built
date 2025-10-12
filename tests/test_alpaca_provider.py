@@ -50,6 +50,15 @@ def test_fetch_bars_accepts_string_symbol():
     assert fake_client.latest_request["limit"] == 2
 
 
+def test_fetch_bars_cleans_string_symbols():
+    fake_client = FakeRESTClient()
+    data = fetch_bars("'AAPL', ' MSFT ' ", limit=1, client=fake_client)
+
+    assert set(data.keys()) == {"AAPL", "MSFT"}
+    assert fake_client.latest_request is not None
+    assert fake_client.latest_request["symbols"] == ["AAPL", "MSFT"]
+
+
 def test_fetch_bars_supports_multiple_symbols():
     fake_client = FakeRESTClient()
     data = fetch_bars(["AAPL", "MSFT"], limit=1, client=fake_client)
@@ -66,6 +75,13 @@ def test_fetch_bars_requires_non_empty_symbols():
 
     with pytest.raises(ValueError):
         fetch_bars([], client=fake_client)
+
+
+def test_fetch_bars_rejects_blank_string():
+    fake_client = FakeRESTClient()
+
+    with pytest.raises(ValueError):
+        fetch_bars("   ", client=fake_client)
 
 
 def test_serialize_bars_single_symbol_returns_list():

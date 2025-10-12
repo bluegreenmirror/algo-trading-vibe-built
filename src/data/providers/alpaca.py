@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
-from typing import Any, Iterable, Sequence
+from typing import Any
 
 from src.config import Settings
 
@@ -85,10 +86,7 @@ def fetch_bars(
     if settings is None:
         settings = Settings()
 
-    if isinstance(symbols, str):
-        symbol_list: list[str] = [symbols]
-    else:
-        symbol_list = list(symbols)
+    symbol_list = Settings._normalize_symbols(symbols)
 
     if not symbol_list:
         raise ValueError("symbols must contain at least one entry")
@@ -143,8 +141,12 @@ def main(argv: Iterable[str] | None = None) -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     fetch_parser = subparsers.add_parser("fetch", help="Fetch OHLCV bars for one or more symbols.")
-    fetch_parser.add_argument("symbols", nargs="*", help="Symbols to fetch; defaults to settings.symbol_list if omitted.")
-    fetch_parser.add_argument("--limit", type=int, default=5, help="Number of bars to fetch per symbol.")
+    fetch_parser.add_argument(
+        "symbols", nargs="*", help="Symbols to fetch; defaults to settings.symbol_list if omitted."
+    )
+    fetch_parser.add_argument(
+        "--limit", type=int, default=5, help="Number of bars to fetch per symbol."
+    )
 
     args = parser.parse_args(list(argv) if argv is not None else None)
 

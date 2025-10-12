@@ -9,7 +9,7 @@ of the library is provided under ``src/pydantic_settings``.  The shim only
 implements the features we need here (basic attribute handling) but keeps the
 same API so the rest of the code does not need to change.
 """
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -38,14 +38,33 @@ class Settings(BaseSettings):
         env_file=".env", env_file_encoding="utf-8", case_sensitive=False
     )  # load variables from .env with case-insensitive keys
 
+    @staticmethod
+    def _normalize_symbols(value: Sequence[str] | str | None) -> list[str]:
+        """Return a list of ticker strings with whitespace and quotes removed."""
+
+        if value is None:
+            return []
+
+        if isinstance(value, str):
+            candidates: Iterable[str] = value.split(",")
+        elif isinstance(value, Sequence):
+            candidates = value
+        else:
+            candidates = [value]
+
+        result: list[str] = []
+        for item in candidates:
+            text = str(item).strip()
+            if not text:
+                continue
+            text = text.strip("'\"")
+            text = text.strip()
+            if text:
+                result.append(text)
+        return result
+
     @property
     def symbol_list(self) -> list[str]:
         """Return the configured symbols as a list of non-empty tickers."""
 
-        value = self.symbols
-        if isinstance(value, str):
-            cleaned = [item.strip().strip("'\"") for item in value.split(",")]
-            return [item for item in cleaned if item]
-        if isinstance(value, Sequence):
-            return [str(item) for item in value if str(item)]
-        return [str(value)] if value else []
+        return self._normalize_symbols(self.symbols)
