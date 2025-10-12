@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import argparse
+import json
+from collections.abc import Iterable, Sequence
+from dataclasses import asdict, dataclass
 from typing import Any
 
 from src.config import Settings
@@ -67,7 +70,7 @@ def _client(settings: Settings) -> REST:
 
 
 def fetch_bars(
-    symbol: str,
+    symbols: Sequence[str] | str,
     limit: int = 5,
     timeframe: Any = None,
     *,
@@ -83,9 +86,14 @@ def fetch_bars(
     if settings is None:
         settings = Settings()
 
+    symbol_list = Settings._normalize_symbols(symbols)
+
+    if not symbol_list:
+        raise ValueError("symbols must contain at least one entry")
+
     tf = timeframe or getattr(TimeFrame, "Day", "1Day")
     c = client or _client(settings)
-    bars = c.get_bars(symbol, tf, limit=limit)
+    bars = c.get_bars(symbol_list, tf, limit=limit)
     return {symbol: [Bar.from_obj(b) for b in bar_list] for symbol, bar_list in bars.items()}
 
 
@@ -117,9 +125,42 @@ def submit_order(
     return order
 
 
+def _serialize_bars(bars: dict[str, list[Bar]]) -> str:
+    """Return a JSON string representing fetched bars."""
+
+    payload: Any
+    if len(bars) == 1:
+        payload = [asdict(bar) for bar in next(iter(bars.values()))]
+    else:
+        payload = {symbol: [asdict(bar) for bar in bar_list] for symbol, bar_list in bars.items()}
+    return json.dumps(payload, indent=2)
+
+
+def main(argv: Iterable[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Interact with the Alpaca market data API.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    fetch_parser = subparsers.add_parser("fetch", help="Fetch OHLCV bars for one or more symbols.")
+    fetch_parser.add_argument(
+        "symbols", nargs="*", help="Symbols to fetch; defaults to settings.symbol_list if omitted."
+    )
+    fetch_parser.add_argument(
+        "--limit", type=int, default=5, help="Number of bars to fetch per symbol."
+    )
+
+    args = parser.parse_args(list(argv) if argv is not None else None)
+
+    settings = Settings()
+
+    if args.command == "fetch":
+        symbol_list = args.symbols or settings.symbol_list
+        bars = fetch_bars(symbol_list, limit=args.limit, settings=settings)
+        print(_serialize_bars(bars))
+        return 0
+
+    parser.error("Unsupported command")
+    return 1
+
+
 if __name__ == "__main__":
-    # Run with `python -m src.data.providers.alpaca`
-    # Requires .env file with ALPACA_KEY_ID and ALPACA_SECRET_KEY
-    print("Placing a $1 notional buy order for SPY...")
-    order = submit_order(symbol="SPY", notional=1, side="buy")
-    print("Order placed:", order)
+    raise SystemExit(main())
